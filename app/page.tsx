@@ -1,11 +1,16 @@
 import { NextPage } from 'next'
 import React from 'react'
+import ChatImput from './ChatImput'
+import MessageList from './MessageList'
 
 const HomePage: NextPage = () => {
  return (
-  <div>
-   <h1>Home Page</h1>
-  </div>
+  <main>
+   {/* Message List */}
+   <MessageList />
+   {/* Chat Input */}
+   <ChatImput />
+  </main>
  )
 }
 
