@@ -1,12 +1,15 @@
 'use client'
 
 import React, { FormEvent, useState } from 'react'
+import useSWR from 'swr'
 import { v4 as uuid } from 'uuid'
 import { MessageType } from '../typings'
+import { fetcher } from '../utils/functions'
 
 const ChatImput: React.FC = () => {
  const [input, setInput] = useState('')
- const addMessage = (e: FormEvent<HTMLFormElement>) => {
+ const { data: messages, error, mutate } = useSWR('/api/get-messages', fetcher)
+ const addMessage = async (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault()
   if (!input) return
   const messageToSend = input
@@ -29,9 +32,12 @@ const ChatImput: React.FC = () => {
     body: JSON.stringify({ message }),
    })
    const data = await response.json()
-   console.warn({ data })
+   return [...messages!, data.message]
   }
-  uploadMessageToUpstash()
+  await mutate(uploadMessageToUpstash, {
+   optimisticData: [...messages!, message],
+   rollbackOnError: true,
+  })
  }
  return (
   <form
