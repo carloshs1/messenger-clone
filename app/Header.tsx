@@ -4,7 +4,7 @@ import { META_LOGO } from '../utils/constants'
 import LogoutButton from './LogoutButton'
 import { unstable_getServerSession } from 'next-auth/next'
 
-const Header = async () => {
+const Header: any = async () => {
  const session = await unstable_getServerSession()
  return (
   <header
