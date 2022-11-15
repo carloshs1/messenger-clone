@@ -39,7 +39,7 @@ const MessageComponent: React.FC<{ messageObject: MessageType }> = ({
        isUser && 'text-right'
       }`}
      >
-      {new Date(messageObject.created_at).toLocaleString()}
+      {new Date(messageObject.created_at).toString()}
      </p>
     </div>
    </div>

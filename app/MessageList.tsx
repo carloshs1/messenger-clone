@@ -7,7 +7,9 @@ import { MessageType } from '../typings'
 import { fetcher } from '../utils/functions'
 import MessageComponent from './MessageComponent'
 
-const MessageList: React.FC = () => {
+const MessageList: React.FC<{ initialMessages: MessageType[] }> = ({
+ initialMessages,
+}) => {
  const { data: messages, error, mutate } = useSWR('/api/get-messages', fetcher)
  useEffect(() => {
   const channel = clientPusher.subscribe('messages')
@@ -28,7 +30,7 @@ const MessageList: React.FC = () => {
 
  return (
   <div className="space-y-5 px-5 pt-8 pb-32 max-w-2xl xl:max-w-4xl mx-auto">
-   {messages?.map((messageObject) => (
+   {(messages || initialMessages).map((messageObject) => (
     <MessageComponent key={messageObject.id} messageObject={messageObject} />
    ))}
   </div>
