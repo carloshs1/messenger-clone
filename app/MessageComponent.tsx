@@ -3,6 +3,7 @@ import React from 'react'
 import { MessageType } from '../typings'
 import { META_LOGO } from '../utils/constants'
 import { useSession } from 'next-auth/react'
+import TimeAgo from 'react-timeago'
 
 const MessageComponent: React.FC<{ messageObject: MessageType }> = ({
  messageObject,
@@ -41,7 +42,7 @@ const MessageComponent: React.FC<{ messageObject: MessageType }> = ({
        isUser && 'text-right'
       }`}
      >
-      {new Date(messageObject.created_at).toString()}
+      <TimeAgo date={new Date(messageObject.created_at)} />
      </p>
     </div>
    </div>
