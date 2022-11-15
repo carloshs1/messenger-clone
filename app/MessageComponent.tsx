@@ -2,11 +2,13 @@ import Image from 'next/image'
 import React from 'react'
 import { MessageType } from '../typings'
 import { META_LOGO } from '../utils/constants'
+import { useSession } from 'next-auth/react'
 
 const MessageComponent: React.FC<{ messageObject: MessageType }> = ({
  messageObject,
 }) => {
- const isUser = true
+ const { data: session } = useSession()
+ const isUser = session?.user?.email === messageObject.email
  return (
   <div className={`flex w-fit ${isUser && 'ml-auto'}`}>
    <div className={`flex-shrink-0 ${isUser && 'order-2'}`}>

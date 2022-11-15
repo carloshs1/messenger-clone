@@ -5,13 +5,16 @@ import useSWR from 'swr'
 import { v4 as uuid } from 'uuid'
 import { MessageType } from '../typings'
 import { fetcher } from '../utils/functions'
+import { unstable_getServerSession } from 'next-auth/next'
 
-const ChatImput: React.FC = () => {
+const ChatImput: React.FC<{
+ session: Awaited<ReturnType<typeof unstable_getServerSession>>
+}> = ({ session }) => {
  const [input, setInput] = useState('')
  const { data: messages, error, mutate } = useSWR('/api/get-messages', fetcher)
  const addMessage = async (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault()
-  if (!input) return
+  if (!input || !session) return
   const messageToSend = input
   setInput('')
   const id = uuid()
@@ -19,9 +22,9 @@ const ChatImput: React.FC = () => {
    id,
    message: messageToSend,
    created_at: Date.now(),
-   username: 'Elon Musk',
-   profilePic: '',
-   email: '',
+   username: session?.user?.name!,
+   profilePic: session?.user?.image!,
+   email: session?.user?.email!,
   }
   const uploadMessageToUpstash = async () => {
    const response = await fetch('/api/add-message', {
@@ -46,6 +49,7 @@ const ChatImput: React.FC = () => {
   >
    <input
     type="text"
+    disabled={!session}
     value={input}
     onChange={(e) => setInput(e.target.value)}
     placeholder="Enter message..."

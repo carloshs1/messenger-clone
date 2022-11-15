@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
 import { META_LOGO } from '../utils/constants'
 import LogoutButton from './LogoutButton'
+import { unstable_getServerSession } from 'next-auth/next'
 
-const Header: React.FC = () => {
- const session = true
+const Header = async () => {
+ const session = await unstable_getServerSession()
  return (
   <header
    className={`sticky top-0 z-50 bg-white flex ${
@@ -19,12 +19,12 @@ const Header: React.FC = () => {
        className="rounded-full mx-2 object-contain"
        height={10}
        width={50}
-       src={META_LOGO}
+       src={session.user?.image || META_LOGO}
        alt="User"
       />
       <div>
        <p className="text-blue-400">Logged in as:</p>
-       <p className="font-bold text-lg">Carlos HS</p>
+       <p className="font-bold text-lg">{session.user?.name}</p>
       </div>
      </div>
      <LogoutButton />
